@@ -11,6 +11,14 @@ provider "aws" {
   version = "~> 2.46"
 }
 
+data "aws_iam_policy" "lambda" {
+  arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+data "aws_iam_policy" "cloudwatch_put_metric" {
+  arn = "arn:aws:iam::092841053073:policy/cloudwatch-put-metric"
+}
+
 resource "aws_iam_role" "lambda_healthcheck" {
   name = "lambda-healthcheck"
   path = "/service-role/"
@@ -32,6 +40,16 @@ resource "aws_iam_role" "lambda_healthcheck" {
   ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "metrics_role" {
+  role       = aws_iam_role.lambda_healthcheck.name
+  policy_arn = data.aws_iam_policy.lambda.arn
+}
+
+resource "aws_iam_role_policy_attachment" "put_metrics_role" {
+  role       = aws_iam_role.lambda_healthcheck.name
+  policy_arn = data.aws_iam_policy.cloudwatch_put_metric.arn
 }
 
 resource "aws_lambda_function" "healthcheck" {
