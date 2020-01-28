@@ -67,8 +67,8 @@ resource "aws_lambda_function" "healthcheck" {
 
 resource "aws_cloudwatch_event_rule" "healthcheck_cron" {
   name                = "healthcheck-schedule"
-  schedule_expression = "cron(*/5 * * * ? *)"
-  is_enabled          = true
+  schedule_expression = "cron(*/30 * * * ? *)"
+  is_enabled          = false
 
   description = "run the healthcheck every 5 minutes"
 
