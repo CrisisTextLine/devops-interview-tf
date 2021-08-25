@@ -5,10 +5,18 @@
 # terraform plan -out plan.out
 # zip -r part.zip part_1.py
 
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+}
+
 provider "aws" {
   profile = "us_staging_devops_interviewee"
   region  = "us-east-2"
-  version = "~> 2.46"
 }
 
 data "aws_iam_policy" "lambda" {
